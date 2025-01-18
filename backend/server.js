@@ -29,12 +29,12 @@ const PORT = process.env.PORT || 5000;
 //   next();
 // });
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Replace with your frontend URL
-    credentials: true, // Allow cookies to be sent with requests
-  })
-);
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173", // Replace with your frontend URL
+//     credentials: true, // Allow cookies to be sent with requests
+//   })
+// );
 
 
 
@@ -43,13 +43,15 @@ const __dirname = path.resolve();
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
-// if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from "backend/dist"
+  app.use(express.static(path.join(__dirname, "backend", "dist")));
 
-  // app.get("*", (req, res) => {
-  //   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-  // });
-// }
+  // Handle React routing, return index.html
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "backend", "dist", "index.html"));
+  });
+}
 
 
 // ROUTING
